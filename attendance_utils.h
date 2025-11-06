@@ -42,7 +42,7 @@ void addStudent(const char* teacherName, const char* sectionName, const char* st
 void displayRoster(const char* teacherName, const char* sectionName);
 void markAttendance(const char* teacherName, const char* sectionName);
 void generateLowAttendanceReport(float threshold);
-
+void displayCollege();  
 void initializeCollege();
 
 #endif 

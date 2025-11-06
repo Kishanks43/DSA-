@@ -82,31 +82,49 @@ void expandStudentArray(ClassNode *classNode)
     classNode->capacity = newCapacity;
 }
 
+ClassNode* addClassToTeacher(TeacherNode* teacher, const char* sectionName) {
+    if (teacher == NULL) return NULL;
+    ClassNode* newClass = createClassNode(sectionName);
+    if (newClass == NULL) return NULL;
+    // Insert at head for simplicity
+    newClass->nextSibling = teacher->firstChild;
+    teacher->firstChild = newClass;
+    return newClass;
+}
 
 void initializeCollege()
-{
-    strcpy(college[0].teacherName, "Anand MS");
-    college[0].firstChild = NULL;
+{   //clear college array thing
+    for (int i = 0; i < MAX_TEACHERS; ++i) {
+        college[i].firstChild = NULL;
+        college[i].teacherName[0] = '\0';
+    }
 
-    ClassNode *classG = createClassNode("G");
-    ClassNode *classA = createClassNode("A");
-    classG->nextSibling = classA;
-    classA->nextSibling = NULL;
-    college[0].firstChild = classG;
+    strncpy(college[0].teacherName, "Anand MS", sizeof(college[0].teacherName)-1);
+    college[0].teacherName[sizeof(college[0].teacherName)-1] = '\0';
+    addClassToTeacher(&college[0], "G");
+    addClassToTeacher(&college[0], "A");
 
-
-    strcpy(college[1].teacherName, "DDCO");
-    college[1].firstChild = NULL;
-    
-    ClassNode* classB1 = createClassNode("B1");
-    ClassNode* classB2 = createClassNode("B2");
-    classB1->nextSibling = classB2;
-    classB2->nextSibling = NULL;
-    college[1].firstChild = classB1;
+    strncpy(college[1].teacherName, "Chetana S", sizeof(college[1].teacherName)-1);
+    college[1].teacherName[sizeof(college[1].teacherName)-1] = '\0';
+    addClassToTeacher(&college[1], "E");
+    addClassToTeacher(&college[1], "F");
+    addClassToTeacher(&college[1], "G"); 
 
     
-    numTeachers=2;
+    strncpy(college[2].teacherName, "Shwetha DS", sizeof(college[2].teacherName)-1);
+    college[2].teacherName[sizeof(college[2].teacherName)-1] = '\0';
+    addClassToTeacher(&college[2], "H");
+    addClassToTeacher(&college[2], "G"); 
 
+    strncpy(college[3].teacherName, "Shubhangi J", sizeof(college[3].teacherName)-1);
+    college[3].teacherName[sizeof(college[3].teacherName)-1] = '\0';
+    addClassToTeacher(&college[3], "D");
+
+    strncpy(college[4].teacherName, "Gayatri RS", sizeof(college[4].teacherName)-1);
+    college[4].teacherName[sizeof(college[4].teacherName)-1] = '\0';
+    addClassToTeacher(&college[4], "F");
+
+    numTeachers = 5;
 }
 
 void addStudent(const char *teacherName, const char *sectionName, const char *studentName, const char *srn)
@@ -336,3 +354,58 @@ void destroyCollege()
     numTeachers = 0;
 }
 
+void displayCollege() {
+    if (numTeachers == 0) {
+        printf("\nNo teachers available in the college.\n");
+        return;
+    }
+
+    printf("\n=== College Structure: Teachers -> Classes -> Students ===\n\n");
+
+    for (int t = 0; t < numTeachers; t++) {
+        TeacherNode* teacher = &college[t];
+        printf("Teacher: %s\n", teacher->teacherName);
+
+        ClassNode* currentClass = teacher->firstChild;
+        if (currentClass == NULL) {
+            printf("  (No classes for this teacher)\n\n");
+            continue;
+        }
+
+        // Iterate classes
+        while (currentClass != NULL) {
+            printf("  Class: %s\n", currentClass->sectionName);
+
+            if (currentClass->numStudents == 0) {
+                printf("    (No students in this class)\n");
+            } else {
+                // Header for students
+                printf("    %-25s %-15s %-12s %-12s %-12s\n",
+                       "Name", "SRN", "Present", "Total", "Attendance%");
+                printf("    ----------------------------------------------------------------------\n");
+
+                for (int i = 0; i < currentClass->numStudents; i++) {
+                    Student* stu = &currentClass->studentArray[i];
+
+                    float percent = 0.0f;
+                    if (stu->totalDays > 0) {
+                        percent = (stu->presentDays * 100.0f) / stu->totalDays;
+                    } else {
+                        // decide representation for no records: show as 0.00 or "N/A"
+                        // we'll show 0.00 to keep columns numeric
+                        percent = 0.0f;
+                    }
+
+                    printf("    %-25s %-15s %-12d %-12d %-11.2f\n",
+                           stu->name, stu->srn, stu->presentDays, stu->totalDays, percent);
+                }
+            }
+
+            printf("\n");
+            currentClass = currentClass->nextSibling;
+        }
+
+        printf("------------------------------------------------------------\n");
+    }
+    printf("End of college structure.\n");
+}
