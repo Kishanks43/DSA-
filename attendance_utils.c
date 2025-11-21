@@ -246,7 +246,7 @@ void markAttendance(const char *teacherName, const char *sectionName)
     }
 
     printf("\n=== Marking Attendance for %s - %s ===\n", teacherName, sectionName);
-    printf("Enter 'P' or 'Present' for present, 'A' or 'Absent' for absent\n");
+    printf("Enter 'P' or 'Present' for present, Default absent if any other key entered \n");
     printf("----------------------------------------------------------\n");
 
     int i;
@@ -265,14 +265,9 @@ void markAttendance(const char *teacherName, const char *sectionName)
             stu->presentDays++;
             printf("  -> Marked as Present\n");
         }
-        else if (strcmp(status, "Absent") == 0 || strcmp(status, "absent") == 0 ||
-                 strcmp(status, "A") == 0 || strcmp(status, "a") == 0)
+        else 
         {
             printf("  -> Marked as Absent\n");
-        }
-        else
-        {
-            printf("  -> Invalid input. Marking as Absent by default.\n");
         }
 
         stu->totalDays++;

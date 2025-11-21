@@ -84,9 +84,9 @@ int main()
             // Low Attendance Report
             printf("\n--- Generate Low Attendance Report ---\n");
             printf("Enter attendance percentage threshold: ");
-            if (scanf("%f", &threshold) != 1)
+            if ((scanf("%f", &threshold) != 1) || threshold>100 || threshold<0)
             {
-                printf("Invalid input! Please enter a number.\n");
+                printf("Invalid input! Please enter a number(valid).\n");
                 while (getchar() != '\n')
                     ;
                 break;
