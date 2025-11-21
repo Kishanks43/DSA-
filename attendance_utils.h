@@ -37,12 +37,13 @@ ClassNode* findClassNode(TeacherNode* teacher, const char* sectionName);
 ClassNode* createClassNode(const char* sectionName);
 void expandStudentArray(ClassNode* classNode);
 void destroyCollege();
-//int addTeacher(const char* teacherName);
+int addTeacher(const char* teacherName);
 void addStudent(const char* teacherName, const char* sectionName, const char* studentName, const char* srn);
 void displayRoster(const char* teacherName, const char* sectionName);
 void markAttendance(const char* teacherName, const char* sectionName);
 void generateLowAttendanceReport(float threshold);
 void displayCollege();  
 void initializeCollege();
+int srnValidation(TeacherNode *teacher, const char *sectionName, const char *srn);
 
 #endif 
